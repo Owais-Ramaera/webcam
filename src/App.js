@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useRef, useState } from "react";
+import Webcam from "react-webcam";
+import "./App.css";
+import Logo from "./logo.png";
 
-function App() {
+const App = () => {
+  const webcamRef = useRef(null);
+  const [capturedImage, setCapturedImage] = useState(null);
+
+  const captureImage = () => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setCapturedImage(imageSrc);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div className="webcam-container">
+          <Webcam
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            className="webcam"
+          />
+          <img src={Logo} alt="logo" className="logo" />
+        </div>
+        <button onClick={captureImage}>Capture Image</button>
+        {capturedImage && (
+          <div>
+            <h2>Captured Image:</h2>
+            <img src={capturedImage} alt="captured" />
+          </div>
+        )}
       </header>
     </div>
   );
-}
+};
 
 export default App;
